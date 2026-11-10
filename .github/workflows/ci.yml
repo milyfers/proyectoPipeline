@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4      # baja el código del repo
+      - uses: actions/setup-node@v4    # instala Node
+        with:
+          node-version: 22
+          cache: npm                   # guarda paquetes para que la siguiente corrida sea más rápida
+      - run: npm ci                    # instala exacto lo que dice package-lock.json
+      - run: npm run lint
+
+  test:
+    needs: lint                        # solo corre si lint pasó
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run coverage          # pruebas + reporte en la carpeta coverage/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: coverage               # empaqueta el reporte para Pages
+
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+    steps:
+      - uses: actions/deploy-pages@v4  # publica lo que subió el job test
