@@ -44,7 +44,7 @@ export function librasAKg(lb) {
         throw new Error('El valor debe ser un número');
     }
     else if (lb < 0) {
-        throw new Error('El valor debe ser un número');
+        throw new Error('El valor debe ser un número positivo');
     }
     return lb / 2.20462;
 }

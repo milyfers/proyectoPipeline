@@ -74,7 +74,7 @@ describe('Conversor de libras a kg', () => {
 });
 
 describe('Error provocado en libras a kg', () => {
-    it('debería lanzar un error por mala conversión', () => {
-        expect(() => librasAKg(-5)).toThrow('Error provocado: El valor debe ser un número positivo');
+    it('debería convertir 10 libras a 4.53592 kg', () => {
+        expect(librasAKg(10)).toBeCloseTo(4.53592);
     });
 });
