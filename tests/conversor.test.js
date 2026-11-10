@@ -72,3 +72,9 @@ describe('Conversor de libras a kg', () => {
         expect(() => librasAKg(-1)).toThrow('El valor debe ser un número');
     });
 });
+
+describe('Error provocado en libras a kg', () => {
+    it('debería lanzar un error por mala conversión', () => {
+        expect(() => librasAKg(-5)).toThrow('Error provocado: El valor debe ser un número positivo');
+    });
+});
